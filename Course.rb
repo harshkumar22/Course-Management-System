@@ -1,5 +1,5 @@
 class Course
-    attr_reader :name, :duration
+    attr_reader :id, :name, :description, :price, :duration, :dop, :prerequist, :rating, :last_update, :category, :lifetime, :draft_status
 
     def initialize(id, name, description, price, duration, dop, prerequist, rating, last_update, category, lifetime, draft_status)
         @id = id
@@ -14,10 +14,6 @@ class Course
         @category = category
         @lifetime = lifetime
         @draft_status = draft_status
-    end
-
-    def id
-        @id
     end
 
     def getData()

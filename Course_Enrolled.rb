@@ -1,4 +1,6 @@
 class Course_Enrolled
+    attr_reader :enrollment_id, :course_id, :user_id, :expiry_date
+
     def initialize(enrollment_id, course_id, user_id, expiry_date)
         @enrollment_id = enrollment_id
         @course_id = course_id

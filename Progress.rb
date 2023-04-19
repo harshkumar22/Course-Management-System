@@ -1,5 +1,5 @@
 class Progress
-    attr_reader :completion_percentage
+    attr_reader :enrollment_id, :total_duration, :watched_duration, :completion_percentage
 
     def initialize(enrollment_id, total_duration, watched_duration)
         @enrollment_id = enrollment_id
