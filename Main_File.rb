@@ -71,18 +71,24 @@ while input != 3
 
         for i in 0...user_list.size
             if user_list[i].email == email and user_list[i].password == password
+                puts "\n\n-------------------------------------------------\n\n"
                 puts "\nUser Logged In Successfully\n\n"
+                puts "\n\n-------------------------------------------------\n\n"
                 log_in_id = user_list[i].id
                 break
             end
         end
         if log_in_id == 0
+            puts "\n\n-------------------------------------------------\n\n"
             puts "\nInvalid Email or Password\n\n"
+            puts "\n\n-------------------------------------------------\n\n"
         else
             break
         end
     elsif input == 3
+        puts "\n\n-------------------------------------------------\n\n"
         puts "\nBye Bye...!!!\n\n"
+        puts "\n\n-------------------------------------------------\n\n"
         break
     else
         puts "\nInvalid Field\n\n"
@@ -110,7 +116,9 @@ if log_in_id != 0
 
 #***************** Course Enrolled ******************
     if input == 1
+        puts "\n\n-------------------------------------------------\n\n"
         puts "List of available courses"
+        puts "\n\n-------------------------------------------------\n\n"
         for i in 0...course_list.size
             course_list[i].getData()
             puts "\n\n"
@@ -123,7 +131,7 @@ if log_in_id != 0
                 puts "Name of the course you selected is #{course_list[i].id} having price $#{course_list[i].price}"
             
         # *************** Transaction ************************
-                
+                puts "\n\n-------------------------------------------------\n\n"
                 puts "To buy this course Press 1"
                 puts "To Exit Press 2"
                 to_buy = gets.to_i 
@@ -133,9 +141,11 @@ if log_in_id != 0
 
                     transaction_list.push(Transaction.new(transaction_list.size + 1, course_list[i].id, log_in_id, course_list[i].price, course_list[i].price,  Time.new, 1))
                 end
+                puts "\n\n-------------------------------------------------\n\n"
                 puts "Buyed and Enrolled Successfully"
 
                 puts "Below are your bill details: \n\n"
+                puts "\n\n-------------------------------------------------\n\n"
                 puts "Transaction ID: #{transaction_list[(transaction_list.size) -1].txn_id}"
                 puts "Course Bought: #{transaction_list[(transaction_list.size) -1].course_id}"
                 puts "Total Amount Paid: #{transaction_list[(transaction_list.size) -1].total_amount}"
@@ -151,6 +161,7 @@ if log_in_id != 0
 
     elsif input == 2
         print "Please enter below the details\n\n"
+        puts "\n\n-------------------------------------------------\n\n"
         id = course_list.size + 1
         print "Enter your course name: "
         name = gets.chomp
@@ -172,7 +183,7 @@ if log_in_id != 0
         draft_status = false 
 
         course_list.push(Course.new(id, name, description, price, duration, dop, prerequisits, rating, last_update, category, lifetime, draft_status))
-
+        puts "\n\n-------------------------------------------------\n\n"
         puts "Add Syallbus Details: "
         sy_id = course_list[(course_list.size) -1]
         print "Enter Name and Module Number ( Name - Number ): "
@@ -194,8 +205,9 @@ if log_in_id != 0
             course_published_list.push(Course_Published.new(course_list[(course_list.size) -1].id, log_in_id))
 
             puts "Your Course published details:" 
-            puts "Course ID #{course_list[(course_list.size) -1].id}"
-            puts "Course Name #{course_list[(course_list.size) -1].name}"
+            puts "\n\n-------------------------------------------------\n\n"
+            puts "Course ID: #{course_list[(course_list.size) -1].id}"
+            puts "Course Name: #{course_list[(course_list.size) -1].name}"
             for i in 0...user_list.size
                 if user_list[i].id == log_in_id
                     puts "Published By #{user_list[i].name}"
