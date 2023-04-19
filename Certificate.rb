@@ -9,8 +9,7 @@ class Certificate
     def getData()
         puts "\nCertificate Data"
         puts "\n****************************************"
-        puts "\nUser ID: #{@user_id}"
-        puts "Course ID: #{@course_id}"
+        puts "\nEnrollment ID: #{@enrollment_id}"
         puts "Progress Status: #{@progress_status}"
         puts "Certificate ID: #{@certificate_id}"
     end 

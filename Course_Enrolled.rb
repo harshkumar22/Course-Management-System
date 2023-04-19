@@ -1,12 +1,17 @@
 class Course_Enrolled
-    def initialize(course_id, user_id)
+    def initialize(enrollment_id, course_id, user_id, expiry_date)
+        @enrollment_id = enrollment_id
         @course_id = course_id
         @user_id = user_id
+        @expiry_date = expiry_date
     end
 
     def getData() 
         puts "\nCourse_Enrolled Data"
         puts "\n****************************************"
-        puts "\nUser with ID #{@user_id} is enrolled in Course with ID #{@course_id}"
+        puts "\n Enrollment ID: #{@enrollment_id}"
+        puts "Course ID: #{@course_id}"
+        puts "User ID: #{@user_id}"
+        puts "Expiry Date: #{@expiry_date}"
     end
 end

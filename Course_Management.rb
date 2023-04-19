@@ -2,6 +2,8 @@
 
 require './User.rb'
 require './Course.rb'
+require './Course_Enrolled.rb'
+require './Transaction.rb'
 
 # List of Arrays to store data 
 
@@ -17,7 +19,7 @@ billing_list = Array.new
 # ************* Dummy Data *******************
 
 user_list.push(User.new(1, "Peter Parker", "pp@example.com", "qaz123", "9876543210", "12-12-2012"))
-course_list.push(Course.new(1, "Ruby", "Complete Ruby Course", "$50", "48hrs", "20-05-2022", 4.8, "20-05-2022", "Programming Language"))
+course_list.push(Course.new(1, "Ruby", "Complete Ruby Course", "$50", "48hrs", "20-05-2022","No Prerequists needed" ,4.8, "20-05-2022", "Programming Language", "Unlimited", true))
 
 # ************ User Class ********************
 
@@ -52,7 +54,19 @@ while input != 3
         email = gets.to_s
         puts "Enter your password:"
         password = gets.to_s
+        
+        puts "Here is the email I gave: #{email}"
+        puts "Here is the email I gave - type: #{email.class}"
+        puts "Here is the password I gave: #{password}"
+
         for i in 0...user_list.size
+            puts "User - email: #{user_list[i].email}"
+            puts "User - email - type: #{user_list[i].email.class}"
+            puts "User - pass: #{user_list[i].password}"
+            puts "Email Condition: #{user_list[i].email == email}"
+            puts "Password Condition: #{user_list[i].password == password}"
+            puts "Herre is my condition: #{user_list[i].email == email and user_list[i].password == password}"
+
             if user_list[i].email == email and user_list[i].password == password
                 puts "User Logged In Successfully"
                 log_in_id = user_list[i].id
@@ -81,47 +95,7 @@ end
 # c1 = Course.new(1, "Ruby", "Complete Ruby Course", "$50", "48hrs", "20-05-2022", 4.8, "20-05-2022", "Programming Language")
 # c1.getData()
 
-# # ************************** User Category ******************
-
-# class User_Category < User
-#     def initialize(user_cat)
-#         @user_id = @id
-#         @user_cat = user_cat
-#     end
-
-#     def getData()
-#         puts "\nUser Category Data"
-#         puts "\n****************************************"
-#         puts "\nUser with ID #{@user_id} is a #{@user_cat}"
-#     end
-# end
-
-
-# # Dynamic User Category Change
-# # for i in 0...user_list.size
-# #     if user_list[i].id == log_id
-# #         puts "Enter your category student/teacher: "
-# #         user_cat = gets 
-# #         user_category_list.push(User_Category.new(log_id, user_cat))c
-# #         puts "Category Updated"
-# #     else
-# #         puts "No, User with ID #{log_id} found"
-# #     end
-# # end
-
-# # puts "\nUser Category Data"
-# # puts "\n****************************************"
-
-# # for i in 0...user_list.size
-# #     user_list[i].getData()
-# # end
-
-
-# u_c = User_Category.new("Student")
-# u_c.getData()
-
 # # *********************** Course Enrolled ******************
-
 
 
 # c_e = Course_Enrolled.new(c1.id, u1.id)
@@ -135,7 +109,37 @@ end
 
 # # ****************** Transaction ***************
 
+if log_in_id != 0
+    puts "Press 1 to Enroll into course: "
+    puts "Press 2 to exit:"
 
+    input = gets.to_i
+
+    if input == 1
+        puts "List of available courses"
+        for i in 0...course_list.size
+            course_list[i].getData()
+        end
+        puts "To get enrolled Enter the name of the course: "
+        name_course = gets.to_s
+        flag = false
+        for i in 0...course_list.size
+            if course_list[i].name == name_course
+                course_enrolled_list.push(Course_Enrolled.new(log_in_id, Course.id))
+                transaction_list.push(SecureRandom.alphanumeric, Course.id, log_in_id, Time.new, 1)
+                puts "Buyed and Enrolled Successfully"
+                flag = true
+            end
+        end
+        if !flag
+            puts "Wrong Course Named Entered"
+        end
+    elsif input == 2
+        puts "See You"
+    else
+        puts "Invalid Choice entered"
+    end
+end
 
 # txn1 = Transaction.new("12dsx3d3", c1.id, u1.id, "23-03-2023", 1)
 # txn1.getData()
