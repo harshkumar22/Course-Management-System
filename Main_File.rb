@@ -3,12 +3,15 @@
 require './User.rb'
 require './Course.rb'
 require './Course_Enrolled.rb'
+require './Course_Published.rb'
+require './Syllabus.rb'
 require './Transaction.rb'
 
 # List of Arrays to store data 
 
 user_list = Array.new
 course_list = Array.new
+syallbus_list = Array.new
 user_category_list = Array.new
 course_enrolled_list = Array.new
 course_published_list = Array.new
@@ -93,28 +96,19 @@ end
 # ************* Course Class *********************
 
 # c1 = Course.new(1, "Ruby", "Complete Ruby Course", "$50", "48hrs", "20-05-2022", 4.8, "20-05-2022", "Programming Language")
-# c1.getData()
+# c1.getData())
 
-# # *********************** Course Enrolled ******************
-
-
-# c_e = Course_Enrolled.new(c1.id, u1.id)
-# c_e.getData()
-
-# # ********************* Course Published *********************
-
-
-# c_e = Course_Published.new(c1.id, u1.id)
-# c_e.getData()
-
-# # ****************** Transaction ***************
+# # ****************** Course Enrolled, Course Published and Transaction ***********************
 
 if log_in_id != 0
     puts "Press 1 to Enroll into course: "
+    puts "Press 2 to Publish a course: "
     puts "Press 2 to exit:"
     print "Enter your choice: "
     input = gets.to_i
 
+
+#***************** Course Enrolled ******************
     if input == 1
         puts "List of available courses"
         for i in 0...course_list.size
@@ -127,11 +121,16 @@ if log_in_id != 0
         for i in 0...course_list.size
             if course_list[i].id == selected_course_id
                 puts "Name of the course you selected is #{course_list[i].id} having price $#{course_list[i].price}"
+            
+        # *************** Transaction ************************
+                
                 puts "To buy this course Press 1"
                 puts "To Exit Press 2"
                 to_buy = gets.to_i 
                 if to_buy == 1
                     course_enrolled_list.push(Course_Enrolled.new(course_enrolled_list.size + 1,log_in_id, course_list[i].id,course_list[i].lifetime))
+
+
                     transaction_list.push(Transaction.new(transaction_list.size + 1, course_list[i].id, log_in_id, course_list[i].price, course_list[i].price,  Time.new, 1))
                 end
                 puts "Buyed and Enrolled Successfully"
@@ -147,7 +146,66 @@ if log_in_id != 0
         if !flag
             puts "Wrong Course ID Entered"
         end
+
+# **************** Course Published ************************
+
     elsif input == 2
+        print "Please enter below the details\n\n"
+        id = course_list.size + 1
+        print "Enter your course name: "
+        name = gets.chomp
+        print "Enter your course description: "
+        description = gets.chomp
+        print "Enter your course price: "
+        price = gets.to_f
+        print "Enter your course duration: "
+        duration = gets.chomp
+        print "Enter your course prerequitis: "
+        prerequisits = gets.chomp 
+        dop = Time.new
+        rating = 4.8
+        last_update = Time.new
+        print "Enter your course category: "
+        category = gets.chomp
+        print "Enter your course lifetime: "
+        lifetime = gets.chomp
+        draft_status = false 
+
+        course_list.push(Course.new(id, name, description, price, duration, dop, prerequisits, rating, last_update, category, lifetime, draft_status))
+
+        puts "Add Syallbus Details: "
+        sy_id = course_list[(course_list.size) -1]
+        print "Enter Name and Module Number ( Name - Number ): "
+        sy_module_name = gets.chomp
+        print "Enter number of video links: "
+        size = gets.to_i
+        sy_link = Array.new
+        for i in 1..size
+            print "Enter link #{i}: "
+            sy_link.push(gets.chomp)
+        end
+        syallbus_list.push(Syllabus.new(sy_id, sy_module_name, sy_link))
+
+        puts "Press 1 to change the drafting_status to published"
+        puts "Press 2 to exit"
+        choice = gets.to_i
+        if choice == 1
+            course_list[(course_list.size) -1].instance_variable_set(:@draft_status, false)
+            course_published_list.push(Course_Published.new(course_list[(course_list.size) -1].id, log_in_id))
+
+            puts "Your Course published details:" 
+            puts "Course ID #{course_list[(course_list.size) -1].id}"
+            puts "Course Name #{course_list[(course_list.size) -1].name}"
+            for i in 0...user_list.size
+                if user_list[i].id == log_in_id
+                    puts "Published By #{user_list[i].name}"
+                end
+            end
+        else
+            puts "Drafting Status Not Changed"
+        end
+
+    elsif input == 3
         puts "See You"
     else
         puts "Invalid Choice entered"
@@ -157,16 +215,6 @@ end
 # txn1 = Transaction.new("12dsx3d3", c1.id, u1.id, "23-03-2023", 1)
 # txn1.getData()
 
-# # ********************** Billing Details ***************************
-
-
-
-# if @payment_status == 1
-#     b_d = Billing_Details.new(1)
-#     b_d.getData()
-# else
-#     puts "\nPayment was unsuccessful"
-# end
 
 # # ************************ Feedback ************************************
 

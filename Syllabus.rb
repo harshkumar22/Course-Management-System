@@ -15,4 +15,4 @@ class Syllabus
         puts "Syallbus current module links:"
         puts syllbus_course_link
     end
-    
+end
