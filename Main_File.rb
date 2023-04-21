@@ -6,6 +6,7 @@ require './Course_Enrolled.rb'
 require './Course_Published.rb'
 require './Syllabus.rb'
 require './Transaction.rb'
+require './Feedback.rb'
 
 # List of Arrays to store data 
 
@@ -34,6 +35,9 @@ course_list.push(Course.new(3, "C++", "Complete C++ Course", "$40", "36hrs", "20
 
 course_list.push(Course.new(4, "Python", "Complete Python Course", "$60", "40hrs", "20-05-2020","No Prerequists needed" ,4.8, "20-05-2020", "Programming Language", "Unlimited", true))
 
+# ***************** Course Enrolled Dummy Data *************************************
+
+course_enrolled_list.push(Course_Enrolled.new(1,4,1,"Unlimited"))
 
 # ************ User Class ********************
 
@@ -109,7 +113,8 @@ end
 if log_in_id != 0
     puts "Press 1 to Enroll into course: "
     puts "Press 2 to Publish a course: "
-    puts "Press 2 to exit:"
+    puts "Press 3 to Give feedback: "
+    puts "Press 4 to exit:"
     print "Enter your choice: "
     input = gets.to_i
 
@@ -126,31 +131,43 @@ if log_in_id != 0
         print "To get enrolled Enter the course id from the above list: "
         selected_course_id = gets.to_i
         flag = false
-        for i in 0...course_list.size
-            if course_list[i].id == selected_course_id
-                puts "Name of the course you selected is #{course_list[i].id} having price $#{course_list[i].price}"
-            
-        # *************** Transaction ************************
-                puts "\n\n-------------------------------------------------\n\n"
-                puts "To buy this course Press 1"
-                puts "To Exit Press 2"
-                to_buy = gets.to_i 
-                if to_buy == 1
-                    course_enrolled_list.push(Course_Enrolled.new(course_enrolled_list.size + 1,log_in_id, course_list[i].id,course_list[i].lifetime))
-
-
-                    transaction_list.push(Transaction.new(transaction_list.size + 1, course_list[i].id, log_in_id, course_list[i].price, course_list[i].price,  Time.new, 1))
-                end
-                puts "\n\n-------------------------------------------------\n\n"
-                puts "Buyed and Enrolled Successfully"
-
-                puts "Below are your bill details: \n\n"
-                puts "\n\n-------------------------------------------------\n\n"
-                puts "Transaction ID: #{transaction_list[(transaction_list.size) -1].txn_id}"
-                puts "Course Bought: #{transaction_list[(transaction_list.size) -1].course_id}"
-                puts "Total Amount Paid: #{transaction_list[(transaction_list.size) -1].total_amount}"
-                puts "Purchase Date: #{transaction_list[(transaction_list.size) -1].purchase_date}"
+        flag_course_enrolled = false
+        for i in 0...course_enrolled_list.size
+            if selected_course_id == course_enrolled_list[i].course_id and log_in_id == course_enrolled_list[i].user_id
+                puts "You are already enrolled in that course. You can't enrolled twice in same course"
+                flag_course_enrolled = true
                 flag = true
+                break
+            end
+        end
+        if flag_course_enrolled != true
+            for i in 0...course_list.size
+                if course_list[i].id == selected_course_id
+                    puts "Name of the course you selected is #{course_list[i].id} having price $#{course_list[i].price}"
+                
+    # ********************************** Transaction ***************************************
+    
+                    puts "\n\n-------------------------------------------------\n\n"
+                    puts "To buy this course Press 1"
+                    puts "To Exit Press 2"
+                    to_buy = gets.to_i 
+                    if to_buy == 1
+                        course_enrolled_list.push(Course_Enrolled.new(course_enrolled_list.size + 1,log_in_id, course_list[i].id,course_list[i].lifetime))
+    
+    
+                        transaction_list.push(Transaction.new(transaction_list.size + 1, course_list[i].id, log_in_id, course_list[i].price, course_list[i].price,  Time.new, 1))
+                    end
+                    puts "\n\n-------------------------------------------------\n\n"
+                    puts "Buyed and Enrolled Successfully"
+    
+                    puts "Below are your bill details: \n\n"
+                    puts "\n\n-------------------------------------------------\n\n"
+                    puts "Transaction ID: #{transaction_list[(transaction_list.size) -1].txn_id}"
+                    puts "Course Bought: #{transaction_list[(transaction_list.size) -1].course_id}"
+                    puts "Total Amount Paid: #{transaction_list[(transaction_list.size) -1].total_amount}"
+                    puts "Purchase Date: #{transaction_list[(transaction_list.size) -1].purchase_date}"
+                    flag = true
+                end
             end
         end
         if !flag
@@ -216,8 +233,32 @@ if log_in_id != 0
         else
             puts "Drafting Status Not Changed"
         end
-
     elsif input == 3
+        puts "Your are enrolled in the following course given below: "
+        puts "\n\n-------------------------------------------------\n\n"
+        for i in 0...course_enrolled_list.size
+            if course_enrolled_list[i].user_id == log_in_id
+                course_enrolled = course_enrolled_list[i].course_id
+                for i in 0...course_list.size
+                    if course_enrolled == course_list[i].id
+                        puts "Course ID: #{course_enrolled}, Course Name: #{course_list[i].name}"
+                    end
+                end
+            end
+        end
+
+        print "\n Enter the course ID from the list above to whom you want to give feedback: "
+        course_feedback_id = gets.to_i
+        print "Rate out of 5: "
+        rate = gets.to_f
+        print "Add Your Review: "
+        review = gets.chomp
+
+        feedback_list.push(course_feedback_id, log_in_id, rate, review, Time.new)
+
+        puts "Thanks For Your Feedback"
+
+    elsif input == 4
         puts "See You"
     else
         puts "Invalid Choice entered"
