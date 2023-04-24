@@ -1,7 +1,9 @@
 class Certificate
-    def initialize(user_id, course_id, progress_status, certificate_id)
-        @user_id = user_id
-        @course_id = course_id
+
+    attr_reader :enrollment_id, :progress_status, :certificate_id
+
+    def initialize(enrollment_id, progress_status, certificate_id)
+        @enrollment_id = enrollment_id
         @progress_status = progress_status
         @certificate_id = certificate_id
     end

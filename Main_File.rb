@@ -7,6 +7,8 @@ require './Course_Published.rb'
 require './Syllabus.rb'
 require './Transaction.rb'
 require './Feedback.rb'
+require './Progress.rb'
+require './Certificate.rb'
 
 # List of Arrays to store data 
 
@@ -18,6 +20,8 @@ course_enrolled_list = Array.new
 course_published_list = Array.new
 feedback_list = Array.new
 transaction_list = Array.new
+progress_list = Array.new
+certificate_list = Array.new
 billing_list = Array.new
 
 # ************* Dummy Data *******************
@@ -27,19 +31,30 @@ user_list.push(User.new(1, "Peter Parker", "pp@example.com", "qaz123", "98765432
 
 # ************* Course Dummy Data ***************
 
-course_list.push(Course.new(1, "Ruby", "Complete Ruby Course", "$50", "48hrs", "20-05-2022","No Prerequists needed" ,4.8, "20-05-2022", "Programming Language", "Unlimited", true))
+course_list.push(Course.new(1, "Ruby", "Complete Ruby Course", 50, 48, "20-05-2022","No Prerequists needed" ,4.8, "20-05-2022", "Programming Language", "Unlimited", true))
 
-course_list.push(Course.new(2, "JavaScript", "Complete JavaScript Course", "$30", "20hrs", "20-05-2021","No Prerequists needed" ,4.8, "20-05-2021", "Scripting Language", "Unlimited", true))
+course_list.push(Course.new(2, "JavaScript", "Complete JavaScript Course", 30, 20, "20-05-2021","No Prerequists needed" ,4.8, "20-05-2021", "Scripting Language", "Unlimited", true))
 
-course_list.push(Course.new(3, "C++", "Complete C++ Course", "$40", "36hrs", "20-06-2022","No Prerequists needed" ,4.8, "20-06-2022", "Programming Language", "Unlimited", true))
+course_list.push(Course.new(3, "C++", "Complete C++ Course", 40, 36, "20-06-2022","No Prerequists needed" ,4.8, "20-06-2022", "Programming Language", "Unlimited", true))
 
-course_list.push(Course.new(4, "Python", "Complete Python Course", "$60", "40hrs", "20-05-2020","No Prerequists needed" ,4.8, "20-05-2020", "Programming Language", "Unlimited", true))
+course_list.push(Course.new(4, "Python", "Complete Python Course", 60, 40, "20-05-2020","No Prerequists needed" ,4.8, "20-05-2020", "Programming Language", "Unlimited", true))
 
 # ***************** Course Enrolled Dummy Data *************************************
 
 course_enrolled_list.push(Course_Enrolled.new(1,4,1,"Unlimited"))
+course_enrolled_list.push(Course_Enrolled.new(2,2,1,"Unlimited"))
 
-# ************ User Class ********************
+# ***************** Progress Dummy Data *************************************
+
+progress_list.push(Progress.new(1,40,0))
+progress_list.push(Progress.new(1,20,100))
+
+# ************ UCertification Dummy Data ********************
+
+certificate_list.push(Certificate.new(2,100,1))
+
+# ************************* Main Program Start Here *******************
+
 
 log_in_id = 0
 
@@ -99,169 +114,212 @@ while input != 3
     end
 end
 
-# u1 = User.new(1, "Peter Parker", "pp@example.com", "xxxxxxxxx", "9876543210", "12-12-2012")
-# u1.getData()
 
-
-# ************* Course Class *********************
-
-# c1 = Course.new(1, "Ruby", "Complete Ruby Course", "$50", "48hrs", "20-05-2022", 4.8, "20-05-2022", "Programming Language")
-# c1.getData())
-
-# # ****************** Course Enrolled, Course Published and Transaction ***********************
+# # ****************** Course Enrolled, Course Published, Feedback and Transaction ***********************
 
 if log_in_id != 0
-    puts "Press 1 to Enroll into course: "
-    puts "Press 2 to Publish a course: "
-    puts "Press 3 to Give feedback: "
-    puts "Press 4 to exit:"
-    print "Enter your choice: "
-    input = gets.to_i
-
-
-#***************** Course Enrolled ******************
-    if input == 1
+    input = -1 
+    while input != 6
         puts "\n\n-------------------------------------------------\n\n"
-        puts "List of available courses"
-        puts "\n\n-------------------------------------------------\n\n"
-        for i in 0...course_list.size
-            course_list[i].getData()
-            puts "\n\n"
-        end
-        print "To get enrolled Enter the course id from the above list: "
-        selected_course_id = gets.to_i
-        flag = false
-        flag_course_enrolled = false
-        for i in 0...course_enrolled_list.size
-            if selected_course_id == course_enrolled_list[i].course_id and log_in_id == course_enrolled_list[i].user_id
-                puts "You are already enrolled in that course. You can't enrolled twice in same course"
-                flag_course_enrolled = true
-                flag = true
-                break
-            end
-        end
-        if flag_course_enrolled != true
-            for i in 0...course_list.size
-                if course_list[i].id == selected_course_id
-                    puts "Name of the course you selected is #{course_list[i].id} having price $#{course_list[i].price}"
-                
-    # ********************************** Transaction ***************************************
-    
-                    puts "\n\n-------------------------------------------------\n\n"
-                    puts "To buy this course Press 1"
-                    puts "To Exit Press 2"
-                    to_buy = gets.to_i 
-                    if to_buy == 1
-                        course_enrolled_list.push(Course_Enrolled.new(course_enrolled_list.size + 1,log_in_id, course_list[i].id,course_list[i].lifetime))
+        puts "Press 1 to Enroll into course: "
+        puts "Press 2 to Publish a course: "
+        puts "Press 3 to Give feedback: "
+        puts "Press 4 to Check Your Progress: "
+        puts "Press 5 to Check Your Certificates: "
+        puts "Press 6 to exit:"
+        print "Enter your choice: "
+        input = gets.to_i
     
     
-                        transaction_list.push(Transaction.new(transaction_list.size + 1, course_list[i].id, log_in_id, course_list[i].price, course_list[i].price,  Time.new, 1))
-                    end
-                    puts "\n\n-------------------------------------------------\n\n"
-                    puts "Buyed and Enrolled Successfully"
-    
-                    puts "Below are your bill details: \n\n"
-                    puts "\n\n-------------------------------------------------\n\n"
-                    puts "Transaction ID: #{transaction_list[(transaction_list.size) -1].txn_id}"
-                    puts "Course Bought: #{transaction_list[(transaction_list.size) -1].course_id}"
-                    puts "Total Amount Paid: #{transaction_list[(transaction_list.size) -1].total_amount}"
-                    puts "Purchase Date: #{transaction_list[(transaction_list.size) -1].purchase_date}"
-                    flag = true
-                end
-            end
-        end
-        if !flag
-            puts "Wrong Course ID Entered"
-        end
-
-# **************** Course Published ************************
-
-    elsif input == 2
-        print "Please enter below the details\n\n"
-        puts "\n\n-------------------------------------------------\n\n"
-        id = course_list.size + 1
-        print "Enter your course name: "
-        name = gets.chomp
-        print "Enter your course description: "
-        description = gets.chomp
-        print "Enter your course price: "
-        price = gets.to_f
-        print "Enter your course duration: "
-        duration = gets.chomp
-        print "Enter your course prerequitis: "
-        prerequisits = gets.chomp 
-        dop = Time.new
-        rating = 4.8
-        last_update = Time.new
-        print "Enter your course category: "
-        category = gets.chomp
-        print "Enter your course lifetime: "
-        lifetime = gets.chomp
-        draft_status = false 
-
-        course_list.push(Course.new(id, name, description, price, duration, dop, prerequisits, rating, last_update, category, lifetime, draft_status))
-        puts "\n\n-------------------------------------------------\n\n"
-        puts "Add Syallbus Details: "
-        sy_id = course_list[(course_list.size) -1]
-        print "Enter Name and Module Number ( Name - Number ): "
-        sy_module_name = gets.chomp
-        print "Enter number of video links: "
-        size = gets.to_i
-        sy_link = Array.new
-        for i in 1..size
-            print "Enter link #{i}: "
-            sy_link.push(gets.chomp)
-        end
-        syallbus_list.push(Syllabus.new(sy_id, sy_module_name, sy_link))
-
-        puts "Press 1 to change the drafting_status to published"
-        puts "Press 2 to exit"
-        choice = gets.to_i
-        if choice == 1
-            course_list[(course_list.size) -1].instance_variable_set(:@draft_status, false)
-            course_published_list.push(Course_Published.new(course_list[(course_list.size) -1].id, log_in_id))
-
-            puts "Your Course published details:" 
+    #***************** Course Enrolled ******************
+        if input == 1
             puts "\n\n-------------------------------------------------\n\n"
-            puts "Course ID: #{course_list[(course_list.size) -1].id}"
-            puts "Course Name: #{course_list[(course_list.size) -1].name}"
-            for i in 0...user_list.size
-                if user_list[i].id == log_in_id
-                    puts "Published By #{user_list[i].name}"
+            puts "List of available courses"
+            puts "\n\n-------------------------------------------------\n\n"
+            for i in 0...course_list.size
+                course_list[i].getData()
+                puts "\n\n"
+            end
+            print "To get enrolled Enter the course id from the above list: "
+            selected_course_id = gets.to_i
+            flag = false
+            flag_course_enrolled = false
+            for i in 0...course_enrolled_list.size
+                if selected_course_id == course_enrolled_list[i].course_id and log_in_id == course_enrolled_list[i].user_id
+                    puts "You are already enrolled in that course. You can't enrolled twice in same course"
+                    flag_course_enrolled = true
+                    flag = true
+                    break
                 end
             end
-        else
-            puts "Drafting Status Not Changed"
-        end
-    elsif input == 3
-        puts "Your are enrolled in the following course given below: "
-        puts "\n\n-------------------------------------------------\n\n"
-        for i in 0...course_enrolled_list.size
-            if course_enrolled_list[i].user_id == log_in_id
-                course_enrolled = course_enrolled_list[i].course_id
+            if flag_course_enrolled != true
                 for i in 0...course_list.size
-                    if course_enrolled == course_list[i].id
-                        puts "Course ID: #{course_enrolled}, Course Name: #{course_list[i].name}"
+                    if course_list[i].id == selected_course_id
+                        puts "Name of the course you selected is #{course_list[i].name} having price $#{course_list[i].price}"
+                    
+        # ********************************** Transaction ***************************************
+        
+                        puts "\n\n-------------------------------------------------\n\n"
+                        puts "To buy this course Press 1"
+                        puts "To Exit Press 2"
+                        to_buy = gets.to_i 
+                        if to_buy == 1
+    
+                            # **************** Adding Data in Course_Enrolled Table ************************
+                            course_enrolled_list.push(Course_Enrolled.new(course_enrolled_list.size + 1,log_in_id, course_list[i].id,course_list[i].lifetime))
+                            
+                            # **************** Adding Data in Progress Table ************************
+        
+                            progress_list.push(Progress.new(course_enrolled_list.size + 1, course_list[i].duration, 0))
+    
+    
+                            # **************** Adding Data in Transaction Table ************************
+                            transaction_list.push(Transaction.new(transaction_list.size + 1, course_list[i].id, log_in_id, course_list[i].price, course_list[i].price,  Time.new, 1))
+                        end
+                        puts "\n\n-------------------------------------------------\n\n"
+                        puts "Buyed and Enrolled Successfully"
+        
+                        puts "Below are your bill details: \n\n"
+                        puts "\n\n-------------------------------------------------\n\n"
+                        puts "Transaction ID: #{transaction_list[(transaction_list.size) -1].txn_id}"
+                        puts "Course Bought: #{transaction_list[(transaction_list.size) -1].course_id}"
+                        puts "Total Amount Paid: #{transaction_list[(transaction_list.size) -1].total_amount}"
+                        puts "Purchase Date: #{transaction_list[(transaction_list.size) -1].purchase_date}"
+                        flag = true
                     end
                 end
             end
+            if !flag
+                puts "Wrong Course ID Entered"
+            end
+    
+    # **************** Course Published ************************
+    
+        elsif input == 2
+            print "Please enter below the details\n\n"
+            puts "\n\n-------------------------------------------------\n\n"
+            id = course_list.size + 1
+            print "Enter your course name: "
+            name = gets.chomp
+            print "Enter your course description: "
+            description = gets.chomp
+            print "Enter your course price: "
+            price = gets.to_f
+            print "Enter your course duration: "
+            duration = gets.chomp
+            print "Enter your course prerequitis: "
+            prerequisits = gets.chomp 
+            dop = Time.new
+            rating = 4.8
+            last_update = Time.new
+            print "Enter your course category: "
+            category = gets.chomp
+            print "Enter your course lifetime: "
+            lifetime = gets.chomp
+            draft_status = false 
+    
+            course_list.push(Course.new(id, name, description, price, duration, dop, prerequisits, rating, last_update, category, lifetime, draft_status))
+            puts "\n\n-------------------------------------------------\n\n"
+            puts "Add Syallbus Details: "
+            sy_id = course_list[(course_list.size) -1]
+            print "Enter Name and Module Number ( Name - Number ): "
+            sy_module_name = gets.chomp
+            print "Enter number of video links: "
+            size = gets.to_i
+            sy_link = Array.new
+            for i in 1..size
+                print "Enter link #{i}: "
+                sy_link.push(gets.chomp)
+            end
+            syallbus_list.push(Syllabus.new(sy_id, sy_module_name, sy_link))
+    
+            puts "Press 1 to change the drafting_status to published"
+            puts "Press 2 to exit"
+            choice = gets.to_i
+            if choice == 1
+                course_list[(course_list.size) -1].instance_variable_set(:@draft_status, false)
+                course_published_list.push(Course_Published.new(course_list[(course_list.size) -1].id, log_in_id))
+    
+                puts "Your Course published details:" 
+                puts "\n\n-------------------------------------------------\n\n"
+                puts "Course ID: #{course_list[(course_list.size) -1].id}"
+                puts "Course Name: #{course_list[(course_list.size) -1].name}"
+                for i in 0...user_list.size
+                    if user_list[i].id == log_in_id
+                        puts "Published By #{user_list[i].name}"
+                    end
+                end
+            else
+                puts "Drafting Status Not Changed"
+            end
+    
+    # **************** Giving Feedback************************
+        elsif input == 3
+            puts "Your are enrolled in the following course given below: "
+            puts "\n\n-------------------------------------------------\n\n"
+            for i in 0...course_enrolled_list.size
+                if course_enrolled_list[i].user_id == log_in_id
+                    course_enrolled = course_enrolled_list[i].course_id
+                    for i in 0...course_list.size
+                        if course_enrolled == course_list[i].id
+                            puts "Course ID: #{course_enrolled}, Course Name: #{course_list[i].name}"
+                        end
+                    end
+                end
+            end
+    
+            print "\n Enter the course ID from the list above to whom you want to give feedback: "
+            course_feedback_id = gets.to_i
+            print "Rate out of 5: "
+            rate = gets.to_f
+            print "Add Your Review: "
+            review = gets.chomp
+    
+            feedback_list.push(course_feedback_id, log_in_id, rate, review, Time.new)
+    
+            puts "Thanks For Your Feedback"
+    
+        elsif input == 4
+            puts "\n\n-------------------------------------------------\n\n"
+            puts "Below are the details for your progress in each course:  "
+            puts "\n\n-------------------------------------------------\n\n"
+    
+            c_erol_id = 0
+            for i in 0...course_enrolled_list.size
+                if course_enrolled_list[i].user_id == log_in_id
+                    c_erol_id = course_enrolled_list[i].enrollment_id
+                    for i in 0...progress_list.size
+                        if progress_list[i].enrollment_id == c_erol_id
+                            progress_list[i].getData()
+                        end
+                    end
+                end
+            end
+    
+        elsif input == 5
+            puts "\n\n-------------------------------------------------\n\n"
+            puts "Below are the details for your certification in each course:  "
+            puts "\n\n-------------------------------------------------\n\n"
+    
+            c_erol_id = 0
+            for i in 0...course_enrolled_list.size
+                if course_enrolled_list[i].user_id == log_in_id
+                    c_erol_id = course_enrolled_list[i].enrollment_id
+                    for i in 0...certificate_list.size
+                        if certificate_list[i].enrollment_id == c_erol_id and certificate_list[i].progress_status == 100
+                            certificate_list[i].getData()
+                        else
+                            puts "Complete your enrolled course to get certified"
+                        end
+                    end
+                end
+            end
+    
+        elsif input == 6
+            puts "See You"
+        else
+            puts "Invalid Choice entered"
         end
-
-        print "\n Enter the course ID from the list above to whom you want to give feedback: "
-        course_feedback_id = gets.to_i
-        print "Rate out of 5: "
-        rate = gets.to_f
-        print "Add Your Review: "
-        review = gets.chomp
-
-        feedback_list.push(course_feedback_id, log_in_id, rate, review, Time.new)
-
-        puts "Thanks For Your Feedback"
-
-    elsif input == 4
-        puts "See You"
-    else
-        puts "Invalid Choice entered"
     end
 end
 
